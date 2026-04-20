@@ -10,5 +10,6 @@ all:
 clean:
 	rm -f $(OUT)
 
+
 format:
 	clang-format -i src/*.c include/*.h
