@@ -1,97 +1,31 @@
 #include <stdio.h>
-
-#include "account.h"
+#include <libpq-fe.h>
 #include "database.h"
-
-#define MAX_ACCOUNTS 1000
-
 int main()
 {
-    Account accounts[MAX_ACCOUNTS];
-    int count = load_accounts(accounts, MAX_ACCOUNTS);
-    int choice;
+    PGconn *conn = connect_db();
 
-    while (1)
-    {
-        printf("\n=== BANK SYSTEM ===\n");
-        printf("1. Create account\n");
-        printf("2. Login\n");
-        printf("3. Exit\n");
-        printf("> ");
-        scanf("%d", &choice);
+    if (!conn)
+        return 1;
 
-        if (choice == 1)
-        {
-            int id;
-            char name[200], password[128];
-            printf("ID: ");
-            scanf("%d", &id);
-            printf("Name: ");
-            scanf("%s", name);
-            printf("Password: ");
-            scanf("%s", password);
-            accounts[count++] = create_account(id, name, password);
-            save_all(accounts, count);
-            printf("Account created!\n");
-        }
-        else if (choice == 2)
-        {
-            int id;
-            char password[128];
-            printf("ID: ");
-            scanf("%d", &id);
-            printf("Password: ");
-            scanf("%s", password);
-            Account *user = login(accounts, count, id, password);
-            if (!user)
-            {
-                printf("Login failed\n");
-                continue;
-            }
-            int sub;
-            while (1)
-            {
-                printf("\n1. Balance\n2. Deposit\n3. Withdraw\n4. Logout\n> ");
-                scanf("%d", &sub);
-                if (sub == 1)
-                {
-                    print_account(*user);
-                }
-                else if (sub == 2)
-                {
-                    float amount;
-                    printf("Amount: ");
-                    scanf("%f", &amount);
-                    deposit(user, amount);
-                    log_transaction("DEPOSIT", user->id, amount);
-                }
-                else if (sub == 3)
-                {
-                    float amount;
-                    printf("Amount: ");
-                    scanf("%f", &amount);
-                    if (withdraw(user, amount))
-                    {
-                        log_transaction("WITHDRAW", user->id, amount);
-                    }
-                    else
-                    {
-                        printf("Not enough money\n");
-                    }
-                }
-                else if (sub == 4)
-                {
-                    break;
-                }
+    db_create_account(conn, 1, "cyril", "1234");
 
-                save_all(accounts, count);
-            }
-        }
-        else if (choice == 3)
-        {
-            break;
-        }
-    }
+    if (db_login(conn, 1, "1234"))
+        printf("Login OK\n");
+    else
+        printf("Login failed\n");
 
+    db_deposit(conn, 1, 100);
+    db_withdraw(conn, 1, 50);
+
+    PQfinish(conn);
+    printf("Balance: %.2f\n", db_get_balance(conn, 1));
+
+    db_create_account(conn, 2, "bob", "1234");
+
+    db_transfer(conn, 1, 2, 20);
+
+    printf("Balance 1: %.2f\n", db_get_balance(conn, 1));
+    printf("Balance 2: %.2f\n", db_get_balance(conn, 2));
     return 0;
 }
