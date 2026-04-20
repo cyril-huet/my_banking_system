@@ -31,3 +31,11 @@ Account *find_account(Account accounts[], int count, int id) {
     }
     return NULL;
 }
+
+void save_all(Account accounts[], int count) {
+    FILE *file = fopen("accounts.db", "wb");
+    if (!file) {return;}
+
+    fwrite(accounts, sizeof(Account), count, file);
+    fclose(file);
+}
