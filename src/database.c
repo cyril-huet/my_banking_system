@@ -21,3 +21,13 @@ int load_accounts(Account accounts[], int max) {
     fclose(file);
     return count;
 }
+
+Account *find_account(Account accounts[], int count, int id) {
+    for (int i = 0; i < count; i++) 
+    {
+        if (accounts[i].id == id) {
+            return &accounts[i];
+        }
+    }
+    return NULL;
+}
