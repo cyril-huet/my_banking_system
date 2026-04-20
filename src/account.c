@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 
-Account create_account(int id, char name[], char password[])
+Account create_account(int id, char *name, char *password)
 {
     Account account;
     account.id = id;
@@ -32,4 +32,16 @@ void print_account(Account account)
 {
     printf("ID: %d\nName: %s\nBalance: %.2f\n", account.id, account.name,
            account.balance);
+}
+
+int transfer(Account *src, Account *dst, float amount)
+{
+    if (src->balance < amount)
+    {
+        return 0;
+    }
+
+    src->balance -= amount;
+    dst->balance += amount;
+    return 1;
 }
