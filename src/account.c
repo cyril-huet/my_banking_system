@@ -45,3 +45,38 @@ int transfer(Account *src, Account *dst, float amount)
     dst->balance += amount;
     return 1;
 }
+
+void save_accounts(Account accounts[], int count)
+{
+    FILE *file = fopen("accounts.txt", "w");
+
+    for (int i = 0; i < count; i++)
+    {
+        fprintf(file, "%d %s %s %f\n", accounts[i].id, accounts[i].name,
+                accounts[i].password, accounts[i].balance);
+    }
+
+    fclose(file);
+}
+
+int load_accounts(Account accounts[])
+{
+    FILE *file = fopen("accounts.txt", "r");
+    int count = 0;
+
+    if (!file)
+    {
+        return 0;
+    }
+
+    while (fscanf(file, "%d %s %s %f", &accounts[count].id,
+                  accounts[count].name, accounts[count].password,
+                  &accounts[count].balance)
+           != EOF)
+    {
+        count++;
+    }
+
+    fclose(file);
+    return count;
+}
