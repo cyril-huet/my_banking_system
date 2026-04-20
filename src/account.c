@@ -15,17 +15,31 @@ Account create_account(int id, char *name, char *password)
 
 void deposit(Account *account, float amount)
 {
-    account->balance += amount;
+    if (amount > 0)
+    {
+        account->balance += amount;
+    }
 }
 
 int withdraw(Account *account, float amount)
 {
-    if (account->balance >= amount)
+    if (amount > 0 && account->balance >= amount)
     {
         account->balance -= amount;
-        return 1; // succès
+        return 1;
     }
-    return 0; // échec
+    return 0;
+}
+
+int transfer(Account *src, Account *dst, float amount)
+{
+    if (amount > 0 && src->balance >= amount)
+    {
+        src->balance -= amount;
+        dst->balance += amount;
+        return 1;
+    }
+    return 0;
 }
 
 void print_account(Account account)
@@ -34,49 +48,14 @@ void print_account(Account account)
            account.balance);
 }
 
-int transfer(Account *src, Account *dst, float amount)
+Account *login(Account accounts[], int count, int id, char *password)
 {
-    if (src->balance < amount)
-    {
-        return 0;
-    }
-
-    src->balance -= amount;
-    dst->balance += amount;
-    return 1;
-}
-
-void save_accounts(Account accounts[], int count)
-{
-    FILE *file = fopen("accounts.txt", "w");
-
     for (int i = 0; i < count; i++)
     {
-        fprintf(file, "%d %s %s %f\n", accounts[i].id, accounts[i].name,
-                accounts[i].password, accounts[i].balance);
+        if (accounts[i].id == id && strcmp(accounts[i].password, password) == 0)
+        {
+            return &accounts[i];
+        }
     }
-
-    fclose(file);
-}
-
-int load_accounts(Account accounts[])
-{
-    FILE *file = fopen("accounts.txt", "r");
-    int count = 0;
-
-    if (!file)
-    {
-        return 0;
-    }
-
-    while (fscanf(file, "%d %s %s %f", &accounts[count].id,
-                  accounts[count].name, accounts[count].password,
-                  &accounts[count].balance)
-           != EOF)
-    {
-        count++;
-    }
-
-    fclose(file);
-    return count;
+    return NULL;
 }

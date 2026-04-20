@@ -55,3 +55,17 @@ void save_all(Account accounts[], int count)
     fwrite(accounts, sizeof(Account), count, file);
     fclose(file);
 }
+
+void log_transaction(char *type, int id, float amount)
+{
+    FILE *file = fopen("transactions.log", "a");
+    if (!file)
+    {
+        return;
+    }
+
+    fprintf(file, "%s | ID:%d | Amount: %.2f\n", type, id, amount);
+    fclose(file);
+}
+
+
