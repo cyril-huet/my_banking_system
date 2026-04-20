@@ -1,13 +1,31 @@
 #include <stdio.h>
-
 #include "account.h"
 
-int main()
-{
-    Account acc = create_account(1, "Cyril", "1234");
+int main() {
+    int id;
+    char name[200];
+    char password[128];
 
-    deposit(&acc, 1000);
-    withdraw(&acc, 200);
+    printf("Enter ID: ");
+    scanf("%d", &id);
+
+    printf("Enter name: ");
+    scanf("%s", name);
+
+    printf("Enter password: ");
+    scanf("%s", password);
+
+    Account acc = create_account(id, name, password);
+
+    float amount;
+
+    printf("Deposit amount: ");
+    scanf("%f", &amount);
+    deposit(&acc, amount);
+
+    printf("Withdraw amount: ");
+    scanf("%f", &amount);
+    withdraw(&acc, amount);
 
     print_account(acc);
 
