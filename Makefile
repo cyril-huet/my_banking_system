@@ -1,14 +1,14 @@
 CC=gcc
 CFLAGS=-Wall -Wextra -Werror -Iinclude
 
-SRC=src/main.c src/account.c
-OUT=bank
+SRC=src/main.c src/account.c src/database.c
+TARGET=bank
 
 all:
-	$(CC) $(CFLAGS) $(SRC) -o $(OUT)
+	$(CC) $(CFLAGS) $(SRC) -o $(TARGET)
 
 clean:
-	rm -f $(OUT)
+	rm -f $(TARGET)
 
 
 format:

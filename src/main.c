@@ -1,33 +1,33 @@
 #include <stdio.h>
 #include "account.h"
+#include "database.h"
+
+#define MAX_ACCOUNTS 100
 
 int main() {
+    Account accounts[MAX_ACCOUNTS];
+    int count = load_accounts(accounts, MAX_ACCOUNTS);
+
+    printf("Loaded %d accounts\n", count);
+
     int id;
     char name[200];
     char password[128];
 
-    printf("Enter ID: ");
+    printf("New account ID: ");
     scanf("%d", &id);
 
-    printf("Enter name: ");
+    printf("Name: ");
     scanf("%s", name);
 
-    printf("Enter password: ");
+    printf("Password: ");
     scanf("%s", password);
 
-    Account acc = create_account(id, name, password);
+    Account new_acc = create_account(id, name, password);
 
-    float amount;
+    save_account(new_acc);
 
-    printf("Deposit amount: ");
-    scanf("%f", &amount);
-    deposit(&acc, amount);
-
-    printf("Withdraw amount: ");
-    scanf("%f", &amount);
-    withdraw(&acc, amount);
-
-    print_account(acc);
+    printf("Account saved!\n");
 
     return 0;
 }
