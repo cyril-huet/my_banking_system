@@ -41,13 +41,6 @@ A simple banking system written in **C**, using:
 ---
 
 
-## 🌿 Branches
-
-- main → clean production version (PostgreSQL + server + web)
-
-- local-version → older version using local database (accounts.db) and early development files
-
----
 
 ## ⚙️  Installation
 
@@ -91,10 +84,6 @@ http://localhost:8080
 ```sh
 make format
 ```
-
-
-
-
 
 
 ## ⚠️  Notes

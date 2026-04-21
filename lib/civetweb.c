@@ -84,8 +84,9 @@
 #    if defined(__sun)
 #        define __EXTENSIONS__ /* to expose flockfile and friends in stdio.h   \
                                 */
-#        define __inline inline /* not recognized on older compiler versions   \
-                                 */
+#        define __inline                                                       \
+            inline /* not recognized on older compiler versions                \
+                    */
 #    endif
 #endif
 
@@ -803,8 +804,9 @@ static int clock_gettime(clockid_t clk_id, struct timespec *tp)
 }
 #    endif
 
-#    define pid_t HANDLE /* MINGW typedefs pid_t to int. Using #define here.   \
-                          */
+#    define pid_t                                                              \
+        HANDLE /* MINGW typedefs pid_t to int. Using #define here.             \
+                */
 
 static int pthread_mutex_lock(pthread_mutex_t *);
 static int pthread_mutex_unlock(pthread_mutex_t *);
