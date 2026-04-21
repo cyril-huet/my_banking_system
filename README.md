@@ -67,7 +67,10 @@ make
 ```
 
 ## ▶️  Run
-
+### Run the executable:
+```sh
+./server
+```
 ### Open your browser:
 
 ```sh
