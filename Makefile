@@ -1,16 +1,30 @@
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror \
--Iinclude \
--I/opt/homebrew/opt/libpq/include
+UNAME_S := $(shell uname -s)
 
-LDFLAGS = -L/opt/homebrew/opt/libpq/lib -lpq -lcivetweb
+# Flags communs
+CFLAGS = -Wall -Wextra -Werror -Iinclude
+LDFLAGS = -lpq
+
+# Config selon OS (homebrew si MacOS)
+ifeq ($(UNAME_S),Darwin)
+	CFLAGS += -I/opt/homebrew/opt/libpq/include
+	LDFLAGS += -L/opt/homebrew/opt/libpq/lib
+endif
+
+ifeq ($(UNAME_S),Linux)
+	CFLAGS += -I/usr/include/postgresql
+	LDFLAGS += -L/usr/lib -lpq
+endif
+
+SRC = src/server.c src/database.c
+TARGET = server
 
 all:
-	$(CC) src/server.c src/database.c -o server $(CFLAGS) $(LDFLAGS)
+	$(CC) $(SRC) -o $(TARGET) $(CFLAGS) $(LDFLAGS)
 
-test:
-	$(CC) src/main.c src/database.c -o test $(CFLAGS) $(LDFLAGS)
+format:
+	find . -name "*.c" -o -name "*.h" | xargs clang-format -i
 
 clean:
-	rm -f server test
+	rm -f $(TARGET)

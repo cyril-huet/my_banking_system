@@ -93,7 +93,6 @@ function login() {
     .then(r => r.text())
     .then(t => {
         authResult.innerText = t;
-
         if (t.includes("OK")) {
             currentUser = id.value;
             showDashboard();
