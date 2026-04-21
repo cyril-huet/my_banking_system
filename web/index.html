@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>My Banking System</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #0f172a;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .card {
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background: #3b82f6;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #2563eb;
+        }
+
+        #dashboard {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- AUTH -->
+<div class="card" id="auth">
+    <h2>My Banking System</h2>
+
+    <input id="id" placeholder="ID">
+    <input id="password" placeholder="Password">
+
+    <button onclick="login()">Login</button>
+    <button onclick="register()">Create Account</button>
+
+    <p id="authResult"></p>
+</div>
+
+<!-- DASHBOARD -->
+<div class="card" id="dashboard">
+    <h2>Dashboard</h2>
+
+    <p id="balance">Balance: ...</p>
+    <p id="message"></p>
+
+    <input id="amount" placeholder="Amount">
+
+    <button onclick="getBalance()">Refresh Balance</button>
+    <button onclick="deposit()">Deposit</button>
+    <button onclick="withdraw()">Withdraw</button>
+
+    <button onclick="logout()">Logout</button>
+</div>
+
+<script>
+const API = "http://localhost:8080";
+let currentUser = null;
+
+// LOGIN
+function login() {
+    fetch(`${API}/login?id=${id.value}&password=${password.value}`)
+    .then(r => r.text())
+    .then(t => {
+        authResult.innerText = t;
+
+        if (t.includes("OK")) {
+            currentUser = id.value;
+            showDashboard();
+        }
+    });
+}
+
+// REGISTER
+function register() {
+    fetch(`${API}/create?id=${id.value}&password=${password.value}`)
+    .then(r => r.text())
+    .then(t => authResult.innerText = t);
+}
+
+// SHOW DASHBOARD
+function showDashboard() {
+    auth.style.display = "none";
+    dashboard.style.display = "block";
+    getBalance();
+}
+
+// BALANCE
+function getBalance() {
+    fetch(`${API}/balance?id=${currentUser}`)
+    .then(r => r.text())
+    .then(t => balance.innerText = t);
+}
+
+// DEPOSIT
+function deposit() {
+    const amt = parseFloat(amount.value);
+    if (isNaN(amt)) return alert("Invalid amount");
+
+    fetch(`${API}/deposit?id=${currentUser}&amount=${amt}`)
+    .then(() => getBalance());
+}
+
+// WITHDRAW
+function withdraw() {
+    const amt = parseFloat(amount.value);
+    if (isNaN(amt)) return alert("Invalid amount");
+
+    fetch(`${API}/withdraw?id=${currentUser}&amount=${amt}`)
+    .then(r => r.text())
+    .then(t => {
+        message.innerText = t; // 👈 affiche message
+        getBalance();
+    });
+}
+
+// LOGOUT
+function logout() {
+    currentUser = null;
+    dashboard.style.display = "none";
+    auth.style.display = "block";
+}
+</script>
+
+</body>
+</html>

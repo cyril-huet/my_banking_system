@@ -1,15 +1,16 @@
-CC=gcc
-CFLAGS=-Wall -Wextra -Werror -Iinclude
+CC = gcc
 
-SRC=src/main.c src/account.c src/database.c
-TARGET=bank
+CFLAGS = -Wall -Wextra -Werror \
+-Iinclude \
+-I/opt/homebrew/opt/libpq/include
+
+LDFLAGS = -L/opt/homebrew/opt/libpq/lib -lpq -lcivetweb
 
 all:
-	$(CC) $(CFLAGS) $(SRC) -o $(TARGET)
+	$(CC) src/server.c src/database.c -o server $(CFLAGS) $(LDFLAGS)
+
+test:
+	$(CC) src/main.c src/database.c -o test $(CFLAGS) $(LDFLAGS)
 
 clean:
-	rm -f $(TARGET)
-
-
-format:
-	clang-format -i src/*.c include/*.h
+	rm -f server test
