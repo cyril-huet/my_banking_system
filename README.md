@@ -67,7 +67,7 @@ make
 ### Open your browser:
 
 ```sh
-http://localhost:8080
+web/index.html
 ```
 
 ## 🎮 API Examples
