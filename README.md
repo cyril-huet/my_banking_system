@@ -28,13 +28,14 @@ A simple banking system written in **C**, using:
 ---
 
 ## 📂 Project Structure
+```sh
 .
 ├── include/ # Headers
 ├── lib/ # External libs (CivetWeb)
 ├── src/ # Source code
 ├── web/ # Frontend
 ├── Makefile
-
+```
 
 
 ---
@@ -42,9 +43,9 @@ A simple banking system written in **C**, using:
 
 ## 🌿 Branches
 
-main → clean production version (PostgreSQL + server + web)
+- main → clean production version (PostgreSQL + server + web)
 
-local-version → older version using local database (accounts.db) and early development files
+- local-version → older version using local database (accounts.db) and early development files
 
 ---
 
@@ -74,14 +75,14 @@ http://localhost:8080
 ```
 
 ## 🎮 API Examples
-
+```sh
 /login?id=1&password=1234
 /balance?id=1
 /deposit?id=1&amount=100
 /withdraw?id=1&amount=50
 /transfer?from=1&to=2&amount=25
 /create?id=2&password=abcd
-
+```
 
 ## 🧹 Format code
 ```sh
